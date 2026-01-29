@@ -1,0 +1,15 @@
+﻿Field	Type	Null	Key	Default	Extra
+id	bigint	NO	PRI	NULL	auto_increment
+created_at	datetime(6)	YES		NULL	
+email	varchar(255)	NO	UNI	NULL	
+graduation_year	int	YES		NULL	
+is_verified	bit(1)	NO		NULL	
+password_hash	varchar(255)	NO		NULL	
+reputation_score	int	NO		NULL	
+role	enum('STUDENT','ALUMNI','ADMIN')	NO		NULL	
+name	varchar(255)	NO		NULL	
+oauth_id	varchar(255)	YES		NULL	
+oauth_provider	varchar(255)	YES		NULL	
+password	varchar(255)	YES		NULL	
+profile_picture	varchar(255)	YES		NULL	
+university_id	bigint	YES	MUL	NULL	

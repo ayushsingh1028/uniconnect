@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - UniConnect</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Dashboard Specific Layout */
+        body {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .dashboard-header {
+            background: white;
+            height: 60px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .dashboard-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            background: white;
+            border-right: 1px solid var(--border-color);
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            overflow-y: auto;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background-color: #eff6ff;
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .content-section {
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Right Panel */
+        .right-panel {
+            width: 300px;
+            background: transparent;
+            padding: 2rem 1.5rem;
+            overflow-y: auto;
+            border-left: 1px solid transparent;
+            /* Optional styling */
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .right-panel {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="dashboard-header justify-between">
+        <div class="flex items-center gap-4">
+            <h2 class="text-primary font-bold text-lg" onclick="switchTab('feed')" style="cursor: pointer;">UniConnect
+            </h2>
+            <div class="input-wrapper hidden-mobile">
+                <input type="text" id="globalSearch" placeholder="Search..." class="input-field"
+                    style="padding: 0.5rem; font-size: 0.9rem; width: 250px;">
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="user-info text-right hidden-mobile">
+                <p id="userName" class="font-bold text-sm">Guest User</p>
+                <p id="userRole" class="text-xs text-muted">STUDENT</p>
+            </div>
+            <button class="btn btn-outline text-sm" id="logoutBtn" onclick="handleLogout()">Logout</button>
+            <button class="btn btn-primary text-sm" onclick="openUnifiedModal('NORMAL')">New Post</button>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <button class="nav-item active" data-tab="feed">
+                <span class="nav-icon">🏠</span> Feed
+            </button>
+            <button class="nav-item" data-tab="pyq">
+                <span class="nav-icon">📚</span> PYQs
+            </button>
+            <button class="nav-item" data-tab="confessions">
+                <span class="nav-icon">🎭</span> Confessions
+            </button>
+            <button class="nav-item" data-tab="alumni">
+                <span class="nav-icon">🎓</span> Alumni
+            </button>
+            <button class="nav-item" data-tab="marketplace">
+                <span class="nav-icon">🛒</span> Marketplace
+            </button>
+            <button class="nav-item" data-tab="events">
+                <span class="nav-icon">📅</span> Events
+            </button>
+            <button class="nav-item" data-tab="messages">
+                <span class="nav-icon">💬</span> Messages
+            </button>
+        </aside>
+
+        <!-- Main Area -->
+        <main class="main-content">
+
+            <!-- SECTION: FEED -->
+            <div id="feed" class="content-section">
+                <h2 class="text-xl font-bold mb-4">Your Feed</h2>
+                <div id="feedContainer">
+                    <!-- Posts will be loaded here -->
+                    <div class="loader">Loading posts...</div>
+                </div>
+            </div>
+
+            <!-- SECTION: PYQ -->
+            <div id="pyq" class="content-section hidden">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold">Previous Year Questions</h2>
+                    <button class="btn btn-primary text-sm" onclick="openUnifiedModal('PYQ')">Upload Paper</button>
+                </div>
+                <div class="mb-6">
+                    <input type="text" placeholder="Search for subjects, year (e.g., 'Data Structures 2023')"
+                        class="input-field">
+                </div>
+                <div id="pyqContainer" class="grid"
+                    style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;">
+                    <!-- PYQs loaded here -->
+                </div>
+            </div>
+
+            <!-- SECTION: CONFESSIONS -->
+            <div id="confessions" class="content-section hidden">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold">Campus Confessions</h2>
+                    <button class="btn btn-primary text-sm" style="background-color: var(--accent-color);"
+                        onclick="openUnifiedModal('CONFESSION')">Post
+                        Anonymously</button>
+                </div>
+
+                <p class="text-muted mb-4 text-sm">All posts are anonymous. Be respectful.</p>
+
+                <div id="confessionsContainer">
+                    <!-- Confessions will be loaded here -->
+                </div>
+            </div>
+
+            <!-- SECTION: ALUMNI -->
+            <div id="alumni" class="content-section hidden">
+                <h2 class="text-xl font-bold mb-4">Alumni Connect</h2>
+                <div id="alumniContainer" class="grid" style="grid-template-columns: 1fr; gap: 1rem;">
+                    <!-- Alumni loaded here -->
+                </div>
+            </div>
+
+            <!-- SECTION: FRESHERS -->
+            <div id="freshers" class="content-section hidden">
+                <h2 class="text-xl font-bold mb-4">Freshers Hub</h2>
+                <div class="grid gap-6">
+                    <div class="card">
+                        <h3 class="font-bold mb-3">🍔 Food Courts</h3>
+                        <div id="foodCourtsContainer" class="flex flex-col gap-2">
+                            <!-- Food courts will load here -->
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3 class="font-bold mb-3">🏠 PG Listings</h3>
+                        <div id="pgContainer" class="flex flex-col gap-2">
+                            <!-- PGs will load here -->
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3 class="font-bold mb-3">🤝 Student Clubs</h3>
+                        <div id="clubsContainer" class="grid"
+                            style="grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem;">
+                            <!-- Clubs will load here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION: MARKETPLACE -->
+            <div id="marketplace" class="content-section hidden">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold">Campus Marketplace</h2>
+                    <button class="btn btn-primary text-sm" onclick="openUnifiedModal('MARKETPLACE')">Sell
+                        Item</button>
+                </div>
+                <div id="marketplaceContainer" class="grid"
+                    style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;">
+                    <!-- Marketplace items loaded here -->
+                </div>
+            </div>
+
+            <!-- SECTION: EVENTS -->
+            <div id="events" class="content-section hidden">
+                <h2 class="text-xl font-bold mb-4">Events & Clubs</h2>
+                <div id="eventsContainer">
+                    <!-- Events loaded here -->
+                </div>
+            </div>
+
+            <!-- SECTION: MESSAGES -->
+            <div id="messages" class="content-section hidden">
+                <h2 class="text-xl font-bold mb-4">Messages</h2>
+                <div class="chat-container card"
+                    style="display: grid; grid-template-columns: 250px 1fr; height: 600px; padding: 0; overflow: hidden;">
+                    <!-- Chat Sidebar -->
+                    <div class="chat-sidebar" style="border-right: 1px solid var(--border-color); overflow-y: auto;">
+                        <div id="chatPartnersList">
+                            <!-- Partners will be loaded here -->
+                        </div>
+                    </div>
+                    <!-- Chat View -->
+                    <div class="chat-view" style="display: flex; flex-direction: column;">
+                        <div id="chatHistory" style="flex: 1; overflow-y: auto; padding: 1rem;">
+                            <p class="text-muted text-center" style="margin-top: 200px;">Select a conversation to start
+                                chatting</p>
+                        </div>
+                        <div id="chatInputArea" class="hidden"
+                            style="padding: 1rem; border-top: 1px solid var(--border-color); display: flex; gap: 8px;">
+                            <input type="text" id="chatMessageInput" class="input-field"
+                                placeholder="Type a message...">
+                            <button class="btn btn-primary" id="sendMessageBtn">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION: SEARCH RESULTS -->
+            <div id="searchResults" class="content-section hidden">
+                <h2 class="text-xl font-bold mb-4">Search Results</h2>
+                <div id="searchPostsContainer"></div>
+                <div id="searchMarketplaceContainer"
+                    style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; margin-top: 2rem;">
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Panel (Extras) -->
+        <aside class="right-panel">
+            <div class="card mb-4" style="padding: 1rem;">
+                <h3 class="font-bold text-sm mb-2">Trending Topics</h3>
+                <ul class="text-sm text-muted" style="list-style: none;">
+                    <li class="mb-2">#ExamSeason</li>
+                    <li class="mb-2">#TechFest2024</li>
+                    <li class="mb-2">#HostelLife</li>
+                    <li>#Internships</li>
+                </ul>
+            </div>
+
+            <div class="card" style="padding: 1rem;">
+                <h3 class="font-bold text-sm mb-2">Top Contributors</h3>
+                <div id="topContributorsList">
+                    <div class="flex items-center gap-2 mb-2">
+                        <div style="width:24px; height:24px; background:#bfdbfe; border-radius:50%;"></div>
+                        <span class="text-sm">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- Unified Create Modal -->
+    <div id="createPostModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Create New</h2>
+                <button class="modal-close" onclick="Modal.close('createPostModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <!-- Type Selection -->
+                <div class="form-group mb-4">
+                    <label for="createPostType">What would you like to create?</label>
+                    <select id="createPostType" class="input-field" onchange="toggleUnifiedFields()">
+                        <option value="NORMAL">General Post</option>
+                        <option value="CONFESSION">Anonymous Confession</option>
+                        <option value="PYQ">Upload PYQ (Exam Paper)</option>
+                        <option value="MARKETPLACE">List Item for Sale</option>
+                    </select>
+                </div>
+
+                <!-- General Post / Confession Fields -->
+                <div id="generalFields">
+                    <div class="form-group mb-4">
+                        <label for="postContent">Content</label>
+                        <textarea id="postContent" class="input-field" rows="4"
+                            placeholder="Share something with your university..."></textarea>
+                    </div>
+                </div>
+
+                <!-- PYQ Fields (Hidden) -->
+                <div id="pyqFields" class="hidden">
+                    <div class="form-group mb-3">
+                        <label for="pyqSubject">Subject Name</label>
+                        <input type="text" id="pyqSubject" class="input-field" placeholder="e.g. Data Structures">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="pyqYear">Year</label>
+                        <input type="number" id="pyqYear" class="input-field" placeholder="2023">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="pyqType">Exam Type</label>
+                        <select id="pyqType" class="input-field">
+                            <option value="MID_SEM">Mid Semester</option>
+                            <option value="END_SEM">End Semester</option>
+                            <option value="QUIZ">Quiz</option>
+                            <option value="SUPPLEMENTARY">Supplementary</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="pyqFile">PDF File</label>
+                        <input type="file" id="pyqFile" class="input-field" accept="application/pdf">
+                    </div>
+                </div>
+
+                <!-- Marketplace Fields (Hidden) -->
+                <div id="marketplaceFields" class="hidden">
+                    <div class="form-group mb-3">
+                        <label for="itemTitle">Item Name</label>
+                        <input type="text" id="itemTitle" class="input-field" placeholder="e.g. Atlas Cycle">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="itemDescription">Description</label>
+                        <textarea id="itemDescription" class="input-field" rows="3"
+                            placeholder="Condition, usage, etc."></textarea>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="itemPrice">Price (₹)</label>
+                        <input type="number" id="itemPrice" class="input-field" placeholder="500">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="itemCategory">Category</label>
+                        <select id="itemCategory" class="input-field">
+                            <option value="BOOKS">Books</option>
+                            <option value="ELECTRONICS">Electronics</option>
+                            <option value="CYCLE">Cycle</option>
+                            <option value="HOSTEL_ESSENTIALS">Hostel Essentials</option>
+                            <option value="OTHER">Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="Modal.close('createPostModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="handleUnifiedSubmit()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

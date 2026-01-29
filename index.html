@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniConnect - The University Social Platform</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), #60a5fa);
+            color: white;
+            padding: 5rem 1rem;
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .nav-header {
+            background: white;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav-header">
+        <div class="container flex justify-between items-center">
+            <a href="/" class="cursor-pointer">
+  <h2 class="text-xl font-bold text-primary">
+    UniConnect
+  </h2>
+</a>
+            <div class="flex gap-4">
+                <button id="openLoginModal" class="btn btn-outline" type="button">Log In</button>
+                <button id="openRegisterModal" class="btn btn-primary" type="button">Create Account</button>
+                <button id="guestBtn" class="btn" type="button" style="background: #e5e7eb; color: #1f2937;">Continue as Guest</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container">
+            <h1 class="text-xl" style="font-size: 3rem; margin-bottom: 1rem;">Connect. Share. Learn.</h1>
+            <p class="text-lg" style="margin-bottom: 2rem; opacity: 0.9;">The ultimate platform for university students
+                to share PYQs, confessions, alumni advice, and more.</p>
+            <a href="register.html" class="btn"
+                style="background: white; color: var(--primary-color); font-weight: bold; padding: 0.75rem 2rem;">Get
+                Started</a>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section class="container" style="padding: 4rem 1rem;">
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+            <!-- Feature 1 -->
+            <div class="card" style="text-align: center;">
+                <div class="feature-icon">📚</div>
+                <h3 class="font-bold mb-4">PYQ Sharing</h3>
+                <p class="text-muted">Access and upload previous year question papers instantly.</p>
+            </div>
+            <!-- Feature 2 -->
+            <div class="card" style="text-align: center;">
+                <div class="feature-icon">🎭</div>
+                <h3 class="font-bold mb-4">Confessions</h3>
+                <p class="text-muted">Share your thoughts anonymously with the campus community.</p>
+            </div>
+            <!-- Feature 3 -->
+            <div class="card" style="text-align: center;">
+                <div class="feature-icon">🎓</div>
+                <h3 class="font-bold mb-4">Alumni Connect</h3>
+                <p class="text-muted">Get guidance and mentorship from seniors who made it big.</p>
+            </div>
+            <!-- Feature 4 -->
+            <div class="card" style="text-align: center;">
+                <div class="feature-icon">🛒</div>
+                <h3 class="font-bold mb-4">Marketplace</h3>
+                <p class="text-muted">Buy, sell, or rent books, gadgets, and cycle within campus.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background: white; padding: 2rem 0; text-align: center; border-top: 1px solid var(--border-color);">
+        <p class="text-muted">&copy; 2026 UniConnect. All rights reserved.</p>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Login</h2>
+                <button class="modal-close" id="closeLoginModal" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="loginForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" name="email" placeholder="your.email@university.edu" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" name="password" placeholder="Enter your password" required>
+                    </div>
+                    <div class="form-error" id="loginError"></div>
+                    <button type="submit" class="btn btn-primary btn-block">Login</button>
+                </form>
+                <div class="auth-footer">
+                    <p>Don't have an account? <a href="#" id="switchToRegister">Register here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Register</h2>
+                <button class="modal-close" id="closeRegisterModal" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="registerForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="registerName">Full Name</label>
+                        <input type="text" id="registerName" name="name" placeholder="Write your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" name="email" placeholder="your email followed by @" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Password</label>
+                        <input type="password" id="registerPassword" name="password" placeholder="At least 6 characters" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerUniversityId">University</label>
+                        <select id="registerUniversityId" name="universityId" required>
+                            <option value="">Select your university</option>
+                            <option value="1">Manipal University Jaipur</option>
+                        </select>
+                        <small>Note: You may need to create a university first via API</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerGraduationYear">Graduation Year</label>
+                        <input type="number" id="registerGraduationYear" name="graduationYear" placeholder="202?" min="2020" max="2030" required>
+                    </div>
+                    <div class="form-error" id="registerError"></div>
+                    <button type="submit" class="btn btn-primary btn-block">Register</button>
+                </form>
+                <div class="auth-footer">
+                    <p>Already have an account? <a href="#" id="switchToLogin">Login here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        // Guest button logic
+        const guestBtn = document.getElementById('guestBtn');
+        if (guestBtn) {
+            guestBtn.onclick = function() {
+                // Remove any existing token/user and set guest flag
+                localStorage.removeItem('uniconnect_token');
+                localStorage.removeItem('uniconnect_user');
+                localStorage.setItem('uniconnect_guest', '1');
+                window.location.href = 'dashboard.html';
+            };
+        }
+    // Modal logic
+    const loginModal = document.getElementById('loginModal');
+    const registerModal = document.getElementById('registerModal');
+    const openLoginModalBtn = document.getElementById('openLoginModal');
+    const openRegisterModalBtn = document.getElementById('openRegisterModal');
+    const closeLoginModalBtn = document.getElementById('closeLoginModal');
+    const closeRegisterModalBtn = document.getElementById('closeRegisterModal');
+    const switchToRegister = document.getElementById('switchToRegister');
+    const switchToLogin = document.getElementById('switchToLogin');
+
+    function openModal(modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+    function closeModal(modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    // Add event listeners for modal open/close
+    if (openLoginModalBtn) openLoginModalBtn.onclick = () => openModal(loginModal);
+    if (openRegisterModalBtn) openRegisterModalBtn.onclick = () => openModal(registerModal);
+    if (closeLoginModalBtn) closeLoginModalBtn.onclick = () => closeModal(loginModal);
+    if (closeRegisterModalBtn) closeRegisterModalBtn.onclick = () => closeModal(registerModal);
+    if (switchToRegister) switchToRegister.onclick = (e) => { e.preventDefault(); closeModal(loginModal); openModal(registerModal); };
+    if (switchToLogin) switchToLogin.onclick = (e) => { e.preventDefault(); closeModal(registerModal); openModal(loginModal); };
+
+    // Close modal on outside click
+    window.onclick = function(event) {
+        if (event.target === loginModal) closeModal(loginModal);
+        if (event.target === registerModal) closeModal(registerModal);
+    };
+
+    // Login form logic
+    const loginForm = document.getElementById('loginForm');
+    const loginError = document.getElementById('loginError');
+    if (loginForm) loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        loginError.textContent = '';
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        if (!validateEmail(email)) {
+            loginError.textContent = 'Please enter a valid email address';
+            return;
+        }
+        if (!validatePassword(password)) {
+            loginError.textContent = 'Password must be at least 6 characters';
+            return;
+        }
+        try {
+            LoadingManager.show('Logging in...');
+            await AuthAPI.login(email, password);
+            Toast.success('Login successful!');
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 500);
+        } catch (error) {
+            LoadingManager.hide();
+            loginError.textContent = error.message || 'Invalid email or password';
+        }
+    });
+
+    // Register form logic
+    const registerForm = document.getElementById('registerForm');
+    const registerError = document.getElementById('registerError');
+    if (registerForm) registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        registerError.textContent = '';
+        const formData = {
+            name: document.getElementById('registerName').value,
+            email: document.getElementById('registerEmail').value,
+            password: document.getElementById('registerPassword').value,
+            universityId: parseInt(document.getElementById('registerUniversityId').value),
+            graduationYear: parseInt(document.getElementById('registerGraduationYear').value)
+        };
+        if (!validateEmail(formData.email)) {
+            registerError.textContent = 'Please enter a valid email address';
+            return;
+        }
+        if (!validatePassword(formData.password)) {
+            registerError.textContent = 'Password must be at least 6 characters';
+            return;
+        }
+        if (!formData.universityId) {
+            registerError.textContent = 'Please select a university';
+            return;
+        }
+        try {
+            LoadingManager.show('Creating account...');
+            await AuthAPI.register(formData);
+            Toast.success('Registration successful!');
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 500);
+        } catch (error) {
+            LoadingManager.hide();
+            registerError.textContent = error.message || 'Registration failed. Please try again.';
+        }
+    });
+
+    // Utility validation (reuse from utils.js if available)
+    function validateEmail(email) {
+        return /.+@.+\..+/.test(email);
+    }
+    function validatePassword(password) {
+        return password.length >= 6;
+    }
+    </script>
+</body>
+
+</html>

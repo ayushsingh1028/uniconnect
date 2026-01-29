@@ -1,0 +1,14 @@
+﻿Field	Type	Null	Key	Default	Extra
+id	bigint	NO	PRI	NULL	auto_increment
+category	enum('FRESHERS_ZONE','GENERAL','ALUMNI_AMA')	NO		NULL	
+content	text	NO		NULL	
+created_at	datetime(6)	YES		NULL	
+downvotes	int	NO		NULL	
+is_anonymous	bit(1)	NO		NULL	
+title	varchar(255)	NO		NULL	
+upvotes	int	NO		NULL	
+author_id	bigint	NO	MUL	NULL	
+like_count	int	YES		NULL	
+type	enum('NORMAL','CONFESSION','FRESHERS_QA')	NO		NULL	
+university_id	bigint	NO	MUL	NULL	
+user_id	bigint	NO	MUL	NULL	

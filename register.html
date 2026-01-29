@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - UniConnect</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>🎓 UniConnect</h1>
+                <p>Create your account</p>
+            </div>
+
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" placeholder="Write your name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="your email followed by @" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="At least 6 characters" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="universityId">University</label>
+                    <select id="universityId" name="universityId" required>
+                        <option value="">Select your university</option>
+                        <option value="1">Manipal University Jaipur</option>
+                    </select>
+                    <small>Note: You may need to create a university first via API</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="graduationYear">Graduation Year</label>
+                    <input type="number" id="graduationYear" name="graduationYear" placeholder="202?" min="2020"
+                        max="2030" required>
+                </div>
+
+                <div class="form-error" id="errorMessage"></div>
+
+                <button type="submit" class="btn btn-primary btn-block">
+                    Register
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Already have an account? <a href="login.html">Login here</a></p>
+                <p><a href="index.html">← Back to home</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        // Redirect if already logged in
+        if (TokenManager.isAuthenticated()) {
+            window.location.href = 'dashboard.html';
+        }
+
+        const form = document.getElementById('registerForm');
+        const errorDiv = document.getElementById('errorMessage');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            errorDiv.textContent = '';
+
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                universityId: parseInt(document.getElementById('universityId').value),
+                graduationYear: parseInt(document.getElementById('graduationYear').value)
+            };
+
+            // Validation
+            if (!validateEmail(formData.email)) {
+                errorDiv.textContent = 'Please enter a valid email address';
+                return;
+            }
+
+            if (!validatePassword(formData.password)) {
+                errorDiv.textContent = 'Password must be at least 6 characters';
+                return;
+            }
+
+            if (!formData.universityId) {
+                errorDiv.textContent = 'Please select a university';
+                return;
+            }
+
+            try {
+                LoadingManager.show('Creating account...');
+                await AuthAPI.register(formData);
+
+                Toast.success('Registration successful!');
+
+                // Redirect to dashboard
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 500);
+
+            } catch (error) {
+                LoadingManager.hide();
+                errorDiv.textContent = error.message || 'Registration failed. Please try again.';
+            }
+        });
+    </script>
+</body>
+
+</html>
