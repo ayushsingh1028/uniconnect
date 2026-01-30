@@ -336,10 +336,4 @@ src/main/java/com/uniconnect/backend/
 └── service/         # Business logic
 ```
 
-## License
 
-MIT License
-
-## Support
-
-For issues or questions, contact: support@uniconnect.com
